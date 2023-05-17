@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Job Search</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 0;
+			background-color: #F0F3F4;
+		}
+
+		.header {
+			background-color: #2980B9;
+			color: #fff;
+			padding: 20px;
+			text-align: center;
+			box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+		}
+
+		.header h1 {
+			margin: 0;
+			font-size: 36px;
+			font-weight: bold;
+			text-shadow: 2px 2px #34495E;
+		}
+
+		.header input[type="text"] {
+			padding: 10px;
+			border: none;
+			border-radius: 5px;
+			margin-top: 10px;
+			font-size: 16px;
+			width: 50%;
+			box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+		}
+
+		.job-listings {
+			margin: 20px;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.job-listings li {
+			background-color: #fff;
+			padding: 20px;
+			margin: 10px;
+			border-radius: 5px;
+			box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+			flex-basis: 30%;
+			min-width: 300px;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+		}
+
+		.job-listings h2 {
+			margin: 0;
+			font-size: 24px;
+			font-weight: bold;
+			color: #2980B9;
+			text-shadow: 1px 1px #fff;
+		}
+
+		.job-listings p {
+			margin: 10px 0;
+			font-size: 16px;
+			color: #555;
+			line-height: 1.5;
+		}
+
+		.job-listings .location {
+			color: #888;
+			font-size: 14px;
+		}
+
+		.job-listings a {
+			margin-top: 10px;
+			background-color: #2980B9;
+			color: #fff;
+			padding: 10px;
+			border: none;
+			border-radius: 5px;
+			text-align: center;
+			text-decoration: none;
+			font-size: 16px;
+			font-weight: bold;
+			box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+			transition: background-color 0.3s ease;
+		}
+
+		.job-listings a:hover {
+			background-color: #1A5276;
+		}
+		
+		@media screen and (max-width: 768px){
+			.header input[type="text"] {
+				width: 100%;
+			}
+			.job-listings li {
+				flex-basis: 50%;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="header">
+		<h1>Job Search</h1>
+		<input type="text" placeholder="Search Jobs" id="search-input" oninput="filterJobs()">
+	</div>
+	<div class="job-listings">
+		<ul id="job-list">
+		</ul>
+	</div>
+
+	<script>
+		var jobPostings = [
+			{ title: "Web Developer", description: "We are looking for a skilled web developer to join our team. In this role, you will be responsible for designing and developing new website features, as well as maintaining and updating existing code. The ideal candidate will have experience with HTML, CSS, and JavaScript, as well as a strong understanding of web development best practices. This is a full-time position based in our New York office.", location: "New York" },
+			{ title: "Marketing Manager", description: "We are seeking a talented marketing manager to lead our marketing efforts. In this role, you will be responsible for creating and executing marketing campaigns across a variety of channels, including social media, email, and advertising. The ideal candidate will have experience with marketing strategy development, as well as a strong understanding of marketing analytics. This is a full-time position based in our Los Angeles office.", location: "Los Angeles" },
+			{ title: "Graphic Designer", description: "We are looking for a creative and talented graphic designer to join our team. In this role, you will be responsible for designing graphics for web and print materials, as well as creating marketing collateral and other visual assets. The ideal candidate will have experience with Adobe Creative Suite and strong design skills. This is a full-time position based in our Chicago office.", location: "Chicago" },
+			{ title: "Software Engineer", description: "We are seeking a skilled software engineer to join our team. In this role, you will be responsible for developing and maintaining software applications, as well as testing and debugging code. The ideal candidate will have experience with programming languages such as Java or Python, as well as a strong understanding of software development best practices. This is a full-time position based in our Houston office.", location: "Houston" },
+			{ title: "Sales Representative", description: "We are looking for a motivated and experienced sales representative to join our team. In this role, you will be responsible for selling our products and services to customers, as well as building and maintaining relationships with clients. The ideal candidate will have a proven track record in sales and excellent communication skills. This is a full-time position based in our Philadelphia office.", location: "Philadelphia" },
+			{ title: "Data Analyst", description: "We are seeking a talented data analyst to join our team. In this role, you will be responsible for analyzing and interpreting data to make business decisions, as well as creating reports and visualizations to communicate insights. The ideal candidate will have experience with data analysis tools such as SQL or Excel, as well as strong analytical and problem-solving skills. This is a full-time position based in our Phoenix office.", location: "Phoenix" },
+			{ title: "Accountant", description: "We are looking for a skilled accountant to join our team. In this role, you will be responsible for managing and maintaining financial records, as well as preparing financial reports and statements. The ideal candidate will have a degree in accounting or a related field, as well as experience with accounting software such as QuickBooks. This is a full-time position based in our San Antonio office.", location: "San Antonio" },
+			{ title: "Project Manager", description: "We are seeking an experienced project manager to lead our project teams. In this role, you will be responsible for planning and executing projects, as well as managing project budgets and timelines. The ideal candidate will have experience with project management methodologies such as Agile or Waterfall, as well as strong leadership skills. This is a full-time position based in our Seattle office.", location: "Seattle" },
+			{ title: "Human Resources Manager", description: "We are looking for a skilled human resources manager to lead our HR department. In this role, you will be responsible for managing employee relations, recruiting and hiring new employees, and maintaining HR policies and procedures. The ideal candidate will have a degree in human resources or a related field, as well as experience managing an HR team. This is a full-time position based in our Miami office.", location: "Miami" },
+			{ title: "Customer Service Representative", description: "We are seeking a friendly and customer-focused individual to join our customer service team. In this role, you will be responsible for answering customer inquiries, resolving issues, and providing excellent customer service. The ideal candidate will have excellent communication skills and a positive attitude. This is a full-time position based in our Atlanta office.", location: "Atlanta" }
+		];
+
+		// Function to filter jobs based on search input
+		function filterJobs() {
+			var searchInput = document.getElementById("search-input").value.toLowerCase();
+			var filteredJobs = jobPostings.filter(function(job) {
+				return job.title.toLowerCase().includes(searchInput) || job.location.toLowerCase().includes(searchInput);
+			});
+			displayJobs(filteredJobs);
+		}
+
+		// Function to display jobs on page
+		function displayJobs(jobs) {
+			var jobList = document.getElementById("job-list");
+			jobList.innerHTML = "";
+			jobs.forEach(function(job) {
+				var li = document.createElement("li");
+				li.innerHTML = "<h2>" + job.title + "</h2><p>" + job.description + "</p><p class='location'>" + job.location + "</p><a href='#'>Apply Now</a>";
+				jobList.appendChild(li);
+			});
+		}
+
+		// Initial display of all jobs
+		displayJobs(jobPostings);
+	</script>
+</body>
+</html>
